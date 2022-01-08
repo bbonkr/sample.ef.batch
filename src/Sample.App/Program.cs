@@ -68,7 +68,8 @@ static async Task DoJobAsync(IHost app)
         {
             // #1-1 Insert some rows
             var elapsedAddJob = await addJob.ExecuteAsync();
-            logger.LogInformation("Add job #1-1: {elapsed}", elapsedAddJob);
+            // not interested
+            //logger.LogInformation("Add job #1-1: {elapsed}", elapsedAddJob);
 
             // #2 Delete rows
             var elapsedRemoveEachJob = await remove3Job.ExecuteAsync();
@@ -76,11 +77,13 @@ static async Task DoJobAsync(IHost app)
 
             // #1-2 Insert some rows
             elapsedAddJob = await addJob.ExecuteAsync();
-            logger.LogInformation("Add job #1-2: {elapsed}", elapsedAddJob);
+            // not interested
+            //logger.LogInformation("Add job #1-2: {elapsed}", elapsedAddJob);
 
             // #3 Delete all rows but transaction will be rollbacked. Rows will have to be exists.
-            //var elapsedRemoveJob1 = await remove1Job.ExecuteAsync();
-            //logger.LogInformation("Remove job #3: {elapsed}", elapsedRemoveJob1);
+            var elapsedRemoveJob1 = await remove1Job.ExecuteAsync();
+            // not interested
+            logger.LogInformation("Remove job #3: {elapsed}", elapsedRemoveJob1);
 
             // #4 Delete all rows and commit its transaction. So rows will be gone.
             var elapsedRemoveJob2 = await remove2Job.ExecuteAsync();
