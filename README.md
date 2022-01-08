@@ -2,7 +2,7 @@
 
 ## About
 
-### environment
+### Environment
 
 * Visual Studio 2022 (v17.0.4)
 * Localdb (Please see appsettings.json)
