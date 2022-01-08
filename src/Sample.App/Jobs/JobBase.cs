@@ -21,7 +21,7 @@ namespace Sample.App.Jobs
 
         protected ILogger Logger => logger;
 
-        public abstract Task ExecuteAsync();
+        public abstract Task<long> ExecuteAsync();
 
         private readonly AppDbContext context;
         private readonly ILogger logger;

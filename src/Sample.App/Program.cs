@@ -31,6 +31,7 @@ static IServiceCollection ConfigureService(IServiceCollection services, IConfigu
     
     services.AddScoped<RemoveSampleData1Job>();
     services.AddScoped<RemoveSampleData2Job>();
+    services.AddScoped<RemoveEachSampleDataJob>();
 
     return services;
 }
@@ -59,15 +60,31 @@ static async Task DoJobAsync(IHost app)
         var addJob = scope.ServiceProvider.GetRequiredService<AddSampleDataJob>();
         var remove1Job = scope.ServiceProvider.GetRequiredService<RemoveSampleData1Job>();
         var remove2Job = scope.ServiceProvider.GetRequiredService<RemoveSampleData2Job>();
+        var remove3Job = scope.ServiceProvider.GetRequiredService<RemoveEachSampleDataJob>(); 
+
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
         try
         {
-            // Insert some rows
-            await addJob.ExecuteAsync();
-            // Delete all rows but transaction will be rollbacked. Rows will have to be exists.
-            await remove1Job.ExecuteAsync();
-            // Delete all rows and commit its transaction. So rows will be gone.
-            await remove2Job.ExecuteAsync();
+            // #1-1 Insert some rows
+            var elapsedAddJob = await addJob.ExecuteAsync();
+            logger.LogInformation("Add job #1-1: {elapsed}", elapsedAddJob);
+
+            // #2 Delete rows
+            var elapsedRemoveEachJob = await remove3Job.ExecuteAsync();
+            logger.LogInformation("Remove each job #2: {elapsed}", elapsedRemoveEachJob);
+
+            // #1-2 Insert some rows
+            elapsedAddJob = await addJob.ExecuteAsync();
+            logger.LogInformation("Add job #1-2: {elapsed}", elapsedAddJob);
+
+            // #3 Delete all rows but transaction will be rollbacked. Rows will have to be exists.
+            //var elapsedRemoveJob1 = await remove1Job.ExecuteAsync();
+            //logger.LogInformation("Remove job #3: {elapsed}", elapsedRemoveJob1);
+
+            // #4 Delete all rows and commit its transaction. So rows will be gone.
+            var elapsedRemoveJob2 = await remove2Job.ExecuteAsync();
+            logger.LogInformation("Remove job #4: {elapsed}", elapsedRemoveJob2);           
         }
         finally
         {
