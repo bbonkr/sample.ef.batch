@@ -1,4 +1,4 @@
-A repository I wrote out of curiosity about the benefits of using raw queries when using EntityFrameworkCore.
+﻿A repository I wrote out of curiosity about the benefits of using raw queries when using EntityFrameworkCore.
 
 ## About
 
@@ -9,13 +9,20 @@ A repository I wrote out of curiosity about the benefits of using raw queries wh
 * .NET 6
 * EntityFrameworkCore v6.0.1
 
+Target is 1,000 rows. 
+
+> if you need dramatic result, Change target rows to up to 100,000. 🤔
+
 
 ### Generate migration code
+
+If entity changes, you should generate migration code.
 
 ```powershell
 PS> cd src/Sample.Data
 PS> dotnet ef migrations add "Initialize database" --context AppDbContext --startup-project ../Sample.App --project ../Sample.Data.SqlServer --json
 ```
+
 ## Jobs
 
 Each job is isolated to measure execution time.
